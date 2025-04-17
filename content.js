@@ -30,7 +30,7 @@ zoomBox.style.padding = '10px';
 zoomBox.style.background = 'rgba(255, 255, 255, 0.95)';
 zoomBox.style.border = '1px solid #ccc';
 zoomBox.style.borderRadius = '8px';
-zoomBox.style.fontSize = '24px';
+zoomBox.style.fontSize = '30x';
 zoomBox.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
 zoomBox.style.maxWidth = '300px';
 zoomBox.style.wordWrap = 'break-word';
@@ -44,17 +44,30 @@ document.addEventListener('mousemove', (e) => {
     return;
   }
 
-  const element = document.elementFromPoint(e.clientX, e.clientY);
+  let element = document.elementFromPoint(e.clientX, e.clientY);
+
+  // Handle shadow DOM elements
+  if (element && element.shadowRoot) {
+    element = element.shadowRoot.elementFromPoint(e.clientX, e.clientY);
+  }
 
   if (element && element.nodeType === 1) {
     const text = element.innerText || element.textContent;
     if (text && text.trim().length > 0) {
-      zoomBox.textContent = text.trim().slice(0, 300); // limit text
-      zoomBox.style.top = `${e.clientY + 20}px`;
-      zoomBox.style.left = `${e.clientX + 20}px`;
-      zoomBox.style.display = 'block';
+      // Ensure the text is not just whitespace or special characters
+      const meaningfulText = text.trim().replace(/\s+/g, ' ');
+      if (meaningfulText.length > 0) {
+        zoomBox.textContent = meaningfulText.slice(0, 300); // limit text
+        zoomBox.style.top = `${e.clientY + 20}px`;
+        zoomBox.style.left = `${e.clientX + 20}px`;
+        zoomBox.style.display = 'block';
+      } else {
+        zoomBox.style.display = 'none';
+      }
     } else {
       zoomBox.style.display = 'none';
     }
+  } else {
+    zoomBox.style.display = 'none';
   }
 });
