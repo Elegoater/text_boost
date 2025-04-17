@@ -10,14 +10,16 @@ chrome.storage.sync.get(['zoomEnabled'], (result) => {
   });
 
 // Listen for toggle messages from popup
-chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === 'TOGGLE_ZOOM') {
-    zoomEnabled = message.enabled;
-    if (!zoomEnabled) {
-      zoomBox.style.display = 'none';
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('Received message:', message);
+    if (message.type === 'TOGGLE_ZOOM') {
+      zoomEnabled = message.enabled;
+      console.log('Zoom enabled:', zoomEnabled);
+      if (!zoomEnabled) {
+        zoomBox.style.display = 'none';
+      }
     }
-  }
-});
+  });
 
 // Create the zoom box
 const zoomBox = document.createElement('div');
