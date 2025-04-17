@@ -21,20 +21,30 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
   });
 
+// Add zoom box styles
+const style = document.createElement('style');
+style.textContent = `
+  #zoomBox {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 300px;
+    word-wrap: break-word;
+    display: none;
+  }
+`;
+document.head.appendChild(style);
+
 // Create the zoom box
 const zoomBox = document.createElement('div');
-zoomBox.style.position = 'fixed';
-zoomBox.style.pointerEvents = 'none';
-zoomBox.style.zIndex = 9999;
-zoomBox.style.padding = '10px';
-zoomBox.style.background = 'rgba(255, 255, 255, 0.95)';
-zoomBox.style.border = '1px solid #ccc';
-zoomBox.style.borderRadius = '8px';
-zoomBox.style.fontSize = '30x';
-zoomBox.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-zoomBox.style.maxWidth = '300px';
-zoomBox.style.wordWrap = 'break-word';
-zoomBox.style.display = 'none';
+zoomBox.id = 'zoomBox';
 document.body.appendChild(zoomBox);
 
 // Track mouse movement
@@ -64,7 +74,6 @@ document.addEventListener('mousemove', (e) => {
   const text = element.innerText || element.textContent;
 
   console.log('Hovered element:', element);
-  console.log('Text content:', text);
 
   // Ensure the text is meaningful and not just whitespace
   if (text && text.trim().length > 0) {
