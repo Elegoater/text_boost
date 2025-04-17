@@ -51,19 +51,29 @@ document.addEventListener('mousemove', (e) => {
     element = element.shadowRoot.elementFromPoint(e.clientX, e.clientY);
   }
 
-  if (element && element.nodeType === 1) {
-    const text = element.innerText || element.textContent;
-    if (text && text.trim().length > 0) {
-      // Ensure the text is not just whitespace or special characters
-      const meaningfulText = text.trim().replace(/\s+/g, ' ');
-      if (meaningfulText.length > 0) {
-        zoomBox.textContent = meaningfulText.slice(0, 300); // limit text
-        zoomBox.style.top = `${e.clientY + 20}px`;
-        zoomBox.style.left = `${e.clientX + 20}px`;
-        zoomBox.style.display = 'block';
-      } else {
-        zoomBox.style.display = 'none';
-      }
+  // Ignore invalid or non-visible elements
+  if (
+    !element ||
+    ['HTML', 'BODY', 'SCRIPT', 'STYLE', 'HEAD'].includes(element.tagName) ||
+    element.offsetParent === null // Check if the element is not visible
+  ) {
+    zoomBox.style.display = 'none';
+    return;
+  }
+
+  const text = element.innerText || element.textContent;
+
+  console.log('Hovered element:', element);
+  console.log('Text content:', text);
+
+  // Ensure the text is meaningful and not just whitespace
+  if (text && text.trim().length > 0) {
+    const meaningfulText = text.trim().replace(/\s+/g, ' ');
+    if (meaningfulText.length > 0) {
+      zoomBox.textContent = meaningfulText.slice(0, 300); // Limit text length
+      zoomBox.style.top = `${e.clientY + 20}px`;
+      zoomBox.style.left = `${e.clientX + 20}px`;
+      zoomBox.style.display = 'block';
     } else {
       zoomBox.style.display = 'none';
     }
