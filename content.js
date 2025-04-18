@@ -73,19 +73,20 @@ document.addEventListener('mousemove', (e) => {
 
   const text = element.innerText || element.textContent;
 
-  console.log('Hovered element:', element);
-
   // Ensure the text is meaningful and not just whitespace
   if (text && text.trim().length > 0) {
     const meaningfulText = text.trim().replace(/\s+/g, ' ');
-    if (meaningfulText.length > 0) {
-      zoomBox.textContent = meaningfulText.slice(0, 300); // Limit text length
-      zoomBox.style.top = `${e.clientY + 20}px`;
-      zoomBox.style.left = `${e.clientX + 20}px`;
-      zoomBox.style.display = 'block';
-    } else {
+
+    // Ignore elements with excessive text (e.g., entire page content)
+    if (meaningfulText.length > 300 || element.tagName === 'BODY') {
       zoomBox.style.display = 'none';
+      return;
     }
+
+    zoomBox.textContent = meaningfulText.slice(0, 300); // Limit text length
+    zoomBox.style.top = `${e.clientY + 20}px`;
+    zoomBox.style.left = `${e.clientX + 20}px`;
+    zoomBox.style.display = 'block';
   } else {
     zoomBox.style.display = 'none';
   }
