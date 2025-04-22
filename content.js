@@ -28,16 +28,26 @@ style.textContent = `
     position: fixed;
     pointer-events: none;
     z-index: 9999;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.95);
-    color: #000;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 15px;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 12px;
     font-size: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-width: 300px;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
     word-wrap: break-word;
     display: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  #zoomBox.show {
+    transform: scale(1);
+    opacity: 1;
   }
 `;
 document.head.appendChild(style);
@@ -83,11 +93,18 @@ document.addEventListener('mousemove', (e) => {
       return;
     }
 
-    zoomBox.textContent = meaningfulText.slice(0, 300); // Limit text length
-    zoomBox.style.top = `${e.clientY + 20}px`;
-    zoomBox.style.left = `${e.clientX + 20}px`;
-    zoomBox.style.display = 'block';
+    if (meaningfulText.length > 0) {
+      zoomBox.textContent = meaningfulText.slice(0, 300); // Limit text length
+      zoomBox.style.top = `${e.clientY + 20}px`;
+      zoomBox.style.left = `${e.clientX + 20}px`;
+      zoomBox.classList.add('show');
+      zoomBox.style.display = 'block';
+    } else {
+      zoomBox.classList.remove('show');
+      zoomBox.style.display = 'none';
+    }
   } else {
     zoomBox.style.display = 'none';
+    zoomBox.classList.remove('show');
   }
 });
