@@ -9,7 +9,7 @@ chrome.storage.sync.get(['zoomEnabled'], (result) => {
     toggle.checked = result.zoomEnabled ?? true;
   });
 
-// Listen for toggle messages from popup
+// Listen for toggle messages from 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('Received message:', message);
     if (message.type === 'TOGGLE_ZOOM') {
