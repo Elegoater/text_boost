@@ -1,5 +1,6 @@
 let zoomEnabled = true;
 
+// Load zoom setting from storage
 chrome.storage.sync.get(['zoomEnabled'], (result) => {
     if (chrome.runtime.lastError) {
       console.error('Error retrieving zoomEnabled:', chrome.runtime.lastError);
